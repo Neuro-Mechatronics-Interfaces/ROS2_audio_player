@@ -1,0 +1,12 @@
+
+title: NML task audio node
+subtitle: Draft v0.0.0
+author: Carnegie Mellon Neuromechatronics Lab (nml@whit.contact)
+date: March 7, 2022
+theme: metropolis #Madrid
+documentclass: scrartcl
+colortheme: beaver
+#fontsize: 12pt
+urlcolor: blue # Package xcolor Error: Undefined color `Maroon'.
+colorlinks: true # https://github.com/jgm/pandoc/issues/2680
+

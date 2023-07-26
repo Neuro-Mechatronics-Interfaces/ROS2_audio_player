@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>README &#8212; Python 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API documentation" href="api.html" />
+    <link rel="prev" title="ROS2 Audio Node for Task Cueing" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="API documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="ROS2 Audio Node for Task Cueing"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python 0.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">README</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="tex2jax_ignore mathjax_ignore section" id="readme">
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
+<p>This ROS2 node is intended for the purpose of adding audio cues to an
+experimental task. Designed for experiments in the Neuromechatronics Lab at
+Carnegie Mellon University.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>This node requires the <a class="reference external" href="https://github.com/TaylorSMarks/playsound#installation">playsound</a> Python package.</p>
+<p>The package is
+<a class="reference external" href="https://docs.ros.org/en/galactic/Tutorials/Creating-Your-First-ROS2-Package.html#build-a-package">built</a>
+in the manner standard for ROS2 packages.</p>
+</div>
+<div class="section" id="parameters-and-configuration">
+<h2>Parameters and configuration<a class="headerlink" href="#parameters-and-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The mapping between task states and audio samples is specified via ROS2
+parameters. All mapping parameters are contained within the <code class="docutils literal notranslate"><span class="pre">state_map</span></code> ROS2
+<a class="reference external" href="https://docs.ros2.org/latest/api/rclpy/api/node.html#rclpy.node.Node.get_parameters_by_prefix">parameter namespace</a>. Each parameter name in
+this namespace should match the name of a state in the task state machine. The
+value of each parameter in this namespace should be a filesystem path to an
+audio file playable by the Python
+<a class="reference external" href="https://pypi.org/project/playsound/">playsound</a> package.</p>
+<p>To add new sounds, simply load a new parameter value. This node allows
+undeclared parameters, so sounds can be added dynamically, and without editing
+editing the source code.</p>
+<div class="section" id="example-yaml-parameter-file">
+<h3>Example YAML parameter file<a class="headerlink" href="#example-yaml-parameter-file" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">audio</span><span class="p">:</span>
+  <span class="n">ros__parameters</span><span class="p">:</span>
+    <span class="n">state_map</span><span class="p">:</span>
+      <span class="n">success</span><span class="p">:</span> <span class="n">assets</span><span class="o">/</span><span class="n">success</span><span class="o">.</span><span class="n">wav</span>
+      <span class="n">intertrial</span><span class="p">:</span> <span class="n">assets</span><span class="o">/</span><span class="n">trial</span><span class="o">.</span><span class="n">wav</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="example-usage">
+<h2>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h2>
+<p>In a ROS2 terminal,<a class="footnote-reference brackets" href="#ros-terminal" id="id1">1</a> run the audio node with the sample parameter
+configuration file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ros2</span> <span class="n">run</span> <span class="n">nml_task_audio</span> <span class="n">audio</span> <span class="o">--</span><span class="n">ros</span><span class="o">-</span><span class="n">args</span> <span class="o">--</span><span class="n">params</span><span class="o">-</span><span class="n">file</span> <span class="n">config</span><span class="o">/</span><span class="n">audio</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>In a separate ROS2 terminal, re-load the parameters file, to ensure that
+undeclared parameters are initialized:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ros2</span> <span class="n">param</span> <span class="n">load</span> <span class="o">/</span><span class="n">audio</span> <span class="n">config</span><span class="o">/</span><span class="n">audio</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>Finally, simulate a state transition by publishing a message to the task state
+topic:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ros2</span> <span class="n">topic</span> <span class="n">pub</span> <span class="o">--</span><span class="n">once</span> <span class="o">/</span><span class="n">task</span><span class="o">/</span><span class="n">state</span> <span class="n">example_interfaces</span><span class="o">/</span><span class="n">msg</span><span class="o">/</span><span class="n">String</span> <span class="s2">&quot;{data: success}&quot;</span>
+</pre></div>
+</div>
+<p>The audio file associated with the success state should play.</p>
+<hr class="footnotes docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="ros-terminal"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>That is, a terminal for which ROS2 and the local ROS2
+workspace have been sourced.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">README</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#parameters-and-configuration">Parameters and configuration</a><ul>
+<li><a class="reference internal" href="#example-yaml-parameter-file">Example YAML parameter file</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-usage">Example usage</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">ROS2 Audio Node for Task Cueing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">API documentation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/README.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="API documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="ROS2 Audio Node for Task Cueing"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python 0.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">README</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright .
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+    </div>
+  </body>
+</html>

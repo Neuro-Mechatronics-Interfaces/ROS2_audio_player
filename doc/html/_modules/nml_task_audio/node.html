@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nml_task_audio.node &#8212; Python 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../nml_task_audio.html" accesskey="U">nml_task_audio</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">nml_task_audio.node</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for nml_task_audio.node</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; A ROS2 node module for playing experimental task-related sounds. &quot;&quot;&quot;</span>
+
+<span class="c1"># Copyright 2022 Carnegie Mellon Neuromechatronics Lab</span>
+<span class="c1">#</span>
+<span class="c1"># This Source Code Form is subject to the terms of the Mozilla Public</span>
+<span class="c1"># License, v. 2.0. If a copy of the MPL was not distributed with this</span>
+<span class="c1"># file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
+
+<span class="kn">from</span> <span class="nn">playsound</span> <span class="k">import</span> <span class="n">playsound</span>
+<span class="kn">from</span> <span class="nn">rclpy</span> <span class="k">import</span> <span class="n">node</span>
+<span class="kn">from</span> <span class="nn">rclpy.qos</span> <span class="k">import</span> <span class="n">QoSPresetProfiles</span>
+<span class="kn">from</span> <span class="nn">example_interfaces.msg</span> <span class="k">import</span> <span class="n">String</span> <span class="k">as</span> <span class="n">state_message</span>
+
+<span class="n">DEFAULT_QOS</span> <span class="o">=</span> <span class="n">QoSPresetProfiles</span><span class="o">.</span><span class="n">SYSTEM_DEFAULT</span><span class="o">.</span><span class="n">value</span>
+
+
+
+<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../api.html#nml_task_audio.node.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  A ROS2 node for playing experimental task-related sounds.</span>
+<span class="sd">  </span>
+<span class="sd">  This node listens for messages on a ROS2 topic designated by the </span>
+<span class="sd">  ``state_topic`` parameter. Each message consists of string data that </span>
+<span class="sd">  specifies the active state. When a message is received, the active state is </span>
+<span class="sd">  mapped to an audio file path -- via ROS2 parameters -- and the audio sample </span>
+<span class="sd">  is played aloud. If no parameter mapping exists for a given state, then no </span>
+<span class="sd">  action is taken.</span>
+<span class="sd">  </span>
+<span class="sd">  For simplicity, this node allows undeclared parameters. Therefore, new states </span>
+<span class="sd">  can be mapped to audio samples by simply adding the states to the loaded ROS2 </span>
+<span class="sd">  parameters.</span>
+<span class="sd">  </span>
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  *args</span>
+<span class="sd">      ``rclpy.node.Node`` arguments.</span>
+<span class="sd">  node_name : str, default=&#39;audio&#39;</span>
+<span class="sd">      ROS2 node name.</span>
+<span class="sd">  **kwargs</span>
+<span class="sd">      ``rclpy.node.Node`` keyword arguments.</span>
+<span class="sd">  </span>
+<span class="sd">  Notes</span>
+<span class="sd">  -----</span>
+<span class="sd">  </span>
+<span class="sd">  The mapping between state labels and audio filepaths can be specified in a </span>
+<span class="sd">  YAML parameters file as follows::</span>
+<span class="sd">  </span>
+<span class="sd">    /nml_task_audio:</span>
+<span class="sd">      ros__parameters:</span>
+<span class="sd">        state_map:</span>
+<span class="sd">          success: assets/success.wav</span>
+<span class="sd">          intertrial: assets/trial.wav</span>
+<span class="sd">  </span>
+<span class="sd">  In this example, ``success.wav`` is played when the success condition is </span>
+<span class="sd">  achieved, and ``trial.wav`` is played when the task enters the intertrial </span>
+<span class="sd">  state.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="s1">&#39;audio&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+      
+      <span class="c1"># Override the ROS default for this node, unless explicitly specified.</span>
+      <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;allow_undeclared_parameters&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+      
+      <span class="c1"># Invoke the superclass constructor.</span>
+      <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+      
+      <span class="c1"># Declare the topic parameter for the state subscription.</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">declare_parameter</span><span class="p">(</span><span class="s1">&#39;state_topic&#39;</span><span class="p">,</span> <span class="s1">&#39;/task/state&#39;</span><span class="p">)</span>
+      
+      <span class="c1"># Subscribe to the task state topic.</span>
+      <span class="n">kwargs</span> \
+        <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">msg_type</span> <span class="o">=</span> <span class="n">state_message</span><span class="p">,</span>
+               <span class="n">topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s1">&#39;state_topic&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+               <span class="n">callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_callback</span><span class="p">,</span>
+               <span class="n">qos_profile</span> <span class="o">=</span> <span class="n">DEFAULT_QOS</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">subscription</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_subscription</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+      
+<div class="viewcode-block" id="Node.state_callback"><a class="viewcode-back" href="../../api.html#nml_task_audio.node.Node.state_callback">[docs]</a>  <span class="k">def</span> <span class="nf">state_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">parameter_namespace</span><span class="o">=</span><span class="s1">&#39;state_map&#39;</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot; ROS callback for task state messages.</span>
+<span class="sd">      </span>
+<span class="sd">      Parameters</span>
+<span class="sd">      ----------</span>
+<span class="sd">      message : ROS2 message</span>
+<span class="sd">          Received ROS2 message. Contains the active state information.</span>
+<span class="sd">      parameter_namespace : str, default=&#39;state_map&#39;</span>
+<span class="sd">          Parameter namespace. Prefix for parameter name.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">parameter_namespace</span><span class="o">=</span><span class="n">parameter_namespace</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">play_state_transition_sound</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+      
+<div class="viewcode-block" id="Node.play_state_transition_sound"><a class="viewcode-back" href="../../api.html#nml_task_audio.node.Node.play_state_transition_sound">[docs]</a>  <span class="k">def</span> <span class="nf">play_state_transition_sound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">parameter_namespace</span><span class="o">=</span><span class="s1">&#39;state_map&#39;</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot; Play an audio sample associated with a particular task state.</span>
+<span class="sd">      </span>
+<span class="sd">      Maps a given state to an audio sample (i.e., an audio file path) via </span>
+<span class="sd">      parameters. If a filepath parameter is not set for a provided state, then </span>
+<span class="sd">      this function takes no action.</span>
+<span class="sd">      </span>
+<span class="sd">      Parameters</span>
+<span class="sd">      ----------</span>
+<span class="sd">      state : str</span>
+<span class="sd">          Name of the state associated with a sound.</span>
+<span class="sd">      parameter_namespace : str, default=&#39;state_map&#39;</span>
+<span class="sd">          Parameter namespace. Prefix for parameter name.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">parameter_name</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{parameter_namespace}</span><span class="s1">.</span><span class="si">{state}</span><span class="s1">&#39;</span>
+      <span class="n">audio_filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter_or</span><span class="p">(</span><span class="n">parameter_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+      <span class="k">if</span> <span class="n">audio_filepath</span><span class="p">:</span> <span class="n">playsound</span><span class="p">(</span><span class="n">audio_filepath</span><span class="p">)</span></div></div>
+      
+      
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../nml_task_audio.html" >nml_task_audio</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">nml_task_audio.node</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright .
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API documentation &#8212; Python 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="README" href="README.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="README.html" title="README"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python 0.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">API documentation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api-documentation">
+<h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-nml_task_audio">
+<span id="nml-task-audio-package"></span><h2><code class="docutils literal notranslate"><span class="pre">nml_task_audio</span></code> Package<a class="headerlink" href="#module-nml_task_audio" title="Permalink to this headline">¶</a></h2>
+<p>A ROS2 package for playing experimental task-related sound cues via ROS messages.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="nml_task_audio.main">
+<span class="sig-prename descclassname"><span class="pre">nml_task_audio.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nml_task_audio.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nml_task_audio.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default ROS2 entry point.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nml_task_audio.node">
+<span id="nml-task-audio-node-module"></span><h2><code class="docutils literal notranslate"><span class="pre">nml_task_audio.node</span></code> Module<a class="headerlink" href="#module-nml_task_audio.node" title="Permalink to this headline">¶</a></h2>
+<p>A ROS2 node module for playing experimental task-related sounds.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="nml_task_audio.node.Node">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nml_task_audio.node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'audio'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nml_task_audio/node.html#Node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nml_task_audio.node.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>A ROS2 node for playing experimental task-related sounds.</p>
+<p>This node listens for messages on a ROS2 topic designated by the 
+<code class="docutils literal notranslate"><span class="pre">state_topic</span></code> parameter. Each message consists of string data that 
+specifies the active state. When a message is received, the active state is 
+mapped to an audio file path – via ROS2 parameters – and the audio sample 
+is played aloud. If no parameter mapping exists for a given state, then no 
+action is taken.</p>
+<p>For simplicity, this node allows undeclared parameters. Therefore, new states 
+can be mapped to audio samples by simply adding the states to the loaded ROS2 
+parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>*args</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">rclpy.node.Node</span></code> arguments.</p>
+</dd>
+<dt><strong>node_name</strong><span class="classifier">str, default=’audio’</span></dt><dd><p>ROS2 node name.</p>
+</dd>
+<dt><strong>**kwargs</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">rclpy.node.Node</span></code> keyword arguments.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The mapping between state labels and audio filepaths can be specified in a 
+YAML parameters file as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">nml_task_audio</span><span class="p">:</span>
+  <span class="n">ros__parameters</span><span class="p">:</span>
+    <span class="n">state_map</span><span class="p">:</span>
+      <span class="n">success</span><span class="p">:</span> <span class="n">assets</span><span class="o">/</span><span class="n">success</span><span class="o">.</span><span class="n">wav</span>
+      <span class="n">intertrial</span><span class="p">:</span> <span class="n">assets</span><span class="o">/</span><span class="n">trial</span><span class="o">.</span><span class="n">wav</span>
+</pre></div>
+</div>
+<p>In this example, <code class="docutils literal notranslate"><span class="pre">success.wav</span></code> is played when the success condition is 
+achieved, and <code class="docutils literal notranslate"><span class="pre">trial.wav</span></code> is played when the task enters the intertrial 
+state.</p>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nml_task_audio.node.Node.play_state_transition_sound" title="nml_task_audio.node.Node.play_state_transition_sound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">play_state_transition_sound</span></code></a>(state[, ...])</p></td>
+<td><p>Play an audio sample associated with a particular task state.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nml_task_audio.node.Node.state_callback" title="nml_task_audio.node.Node.state_callback"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_callback</span></code></a>(message[, parameter_namespace])</p></td>
+<td><p>ROS callback for task state messages.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="nml_task_audio.node.Node.play_state_transition_sound">
+<span class="sig-name descname"><span class="pre">play_state_transition_sound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'state_map'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nml_task_audio/node.html#Node.play_state_transition_sound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nml_task_audio.node.Node.play_state_transition_sound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play an audio sample associated with a particular task state.</p>
+<p>Maps a given state to an audio sample (i.e., an audio file path) via 
+parameters. If a filepath parameter is not set for a provided state, then 
+this function takes no action.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>state</strong><span class="classifier">str</span></dt><dd><p>Name of the state associated with a sound.</p>
+</dd>
+<dt><strong>parameter_namespace</strong><span class="classifier">str, default=’state_map’</span></dt><dd><p>Parameter namespace. Prefix for parameter name.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nml_task_audio.node.Node.state_callback">
+<span class="sig-name descname"><span class="pre">state_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'state_map'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nml_task_audio/node.html#Node.state_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nml_task_audio.node.Node.state_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>ROS callback for task state messages.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>message</strong><span class="classifier">ROS2 message</span></dt><dd><p>Received ROS2 message. Contains the active state information.</p>
+</dd>
+<dt><strong>parameter_namespace</strong><span class="classifier">str, default=’state_map’</span></dt><dd><p>Parameter namespace. Prefix for parameter name.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API documentation</a><ul>
+<li><a class="reference internal" href="#module-nml_task_audio"><code class="docutils literal notranslate"><span class="pre">nml_task_audio</span></code> Package</a></li>
+<li><a class="reference internal" href="#module-nml_task_audio.node"><code class="docutils literal notranslate"><span class="pre">nml_task_audio.node</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="README.html"
+                        title="previous chapter">README</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="README.html" title="README"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python 0.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">API documentation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright .
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+    </div>
+  </body>
+</html>

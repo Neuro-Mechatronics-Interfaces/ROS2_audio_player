@@ -1,0 +1,6 @@
+/audio:
+  ros__parameters:
+    state_topic: /task/center_out/state
+    state_map:
+      success: sounds/success.wav
+      intertrial: sounds/Hallelujah.wav
